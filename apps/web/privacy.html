@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Netflix Quick Blur</title>
+  <meta name="description" content="Privacy Policy for Netflix Quick Blur. 100% offline, zero personal data collection, zero telemetry." />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body class="bg-[#08080a] text-[#ededed] min-h-screen flex flex-col justify-between selection:bg-netflix-red selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-white/[0.08] bg-[#0c0c10]/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="./" class="flex items-center space-x-3">
+        <span class="font-mono-code font-bold text-xs tracking-widest text-netflix-red bg-netflix-red/10 border border-netflix-red/20 px-2 py-0.5 rounded">
+          NQB//01
+        </span>
+        <span class="font-bold text-sm tracking-tight text-white">
+          NETFLIX QUICK BLUR
+        </span>
+      </a>
+
+      <nav class="flex items-center space-x-6 text-xs font-mono-code">
+        <a href="./" class="text-zinc-400 hover:text-white transition-colors">← BACK TO SHOWCASE</a>
+        <a href="./status.html" class="text-zinc-400 hover:text-white transition-colors">SELECTOR HEALTH</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-16 flex-grow">
+    <div class="border-b border-white/[0.08] pb-6 mb-8 font-mono-code">
+      <span class="text-xs text-netflix-red uppercase tracking-wider font-semibold block mb-1">COMPLIANCE PROTOCOL // 01</span>
+      <h1 class="text-3xl sm:text-4xl font-bold text-white font-sans">Privacy Policy</h1>
+      <p class="text-xs text-zinc-400 mt-2">EFFECTIVE DATE: NOVEMBER 24, 2026 • REVISION: V1.0.0</p>
+    </div>
+
+    <div class="space-y-8 text-sm leading-relaxed text-zinc-300">
+      <section>
+        <h2 class="text-lg font-bold text-white mb-2 font-mono-code">01 // CORE PRIVACY GUARANTEE</h2>
+        <p class="text-zinc-400 leading-relaxed">
+          Netflix Quick Blur is engineered with an absolute privacy-first philosophy. Your streaming habits, viewing catalog, and settings are strictly client-side.
+        </p>
+        <div class="mt-3 p-3 bg-white/[0.02] border border-white/[0.08] rounded text-xs font-mono-code text-zinc-300">
+          SUMMARY: Netflix Quick Blur does NOT collect, transmit, sell, or share ANY personal information, browsing history, video titles, IP addresses, or telemetry. It operates 100% locally in your browser sandbox.
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-white mb-2 font-mono-code">02 // DATA EXCLUSION POLICY</h2>
+        <ul class="list-disc pl-5 space-y-1.5 text-xs text-zinc-400 font-mono-code">
+          <li>NO PERSONAL IDENTIFIABLE INFORMATION (PII): No names, email addresses, phone numbers, or account credentials.</li>
+          <li>NO BROWSING OR CATALOG TRACKING: Zero logging of movies, shows, genres, or search queries.</li>
+          <li>NO EXTERNAL TELEMETRY: Zero third-party trackers (Google Analytics, Mixpanel, Sentry).</li>
+          <li>NO NETWORK CALLS: Content scripts execute with 0 outgoing fetch or XMLHttpRequest routines.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-white mb-2 font-mono-code">03 // PERMISSION ENCLAVE</h2>
+        <div class="mt-3 space-y-2 text-xs font-mono-code">
+          <div class="p-3 bg-white/[0.02] border border-white/[0.08] rounded">
+            <span class="text-white font-bold block">PERMISSION: STORAGE</span>
+            <p class="text-zinc-400 text-[11px] mt-1 font-sans">Used strictly to persist your local blur settings (blur radius, dimmer percentage, hotkey, and active presets) via Chrome's native sandboxed storage API.</p>
+          </div>
+          <div class="p-3 bg-white/[0.02] border border-white/[0.08] rounded">
+            <span class="text-white font-bold block">HOST PERMISSION: HTTPS://WWW.NETFLIX.COM/*</span>
+            <p class="text-zinc-400 text-[11px] mt-1 font-sans">Required solely to inject the control button into the Netflix playback bar and apply CSS filter styles to the active video player element on netflix.com.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-white mb-2 font-mono-code">04 // SOURCE AUDITABILITY</h2>
+        <p class="text-xs text-zinc-400 leading-relaxed font-sans">
+          The complete source code for Netflix Quick Blur is fully open-source and publicly auditable on GitHub at
+          <a href="https://github.com/TryOmar/netflix-quick-blur" target="_blank" rel="noreferrer" class="text-netflix-red underline ml-1 font-mono-code">github.com/TryOmar/netflix-quick-blur</a>.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-white mb-2 font-mono-code">05 // TRADEMARK DISCLAIMER</h2>
+        <div class="p-4 bg-white/[0.02] border border-white/[0.08] rounded text-zinc-400 text-xs font-sans">
+          Netflix Quick Blur is an independent open-source project and is not affiliated with, endorsed by, sponsored by, or associated in any way with Netflix, Inc. "Netflix" and all associated logos and trademarks are the registered property of Netflix, Inc.
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="border-t border-white/[0.08] bg-[#0c0c10] py-8 text-xs font-mono-code text-zinc-500 text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <p>© 2026 NETFLIX QUICK BLUR ECOSYSTEM • BUILT BY TRYOMAR • MIT LICENSE</p>
+    </div>
+  </footer>
+</body>
+</html>

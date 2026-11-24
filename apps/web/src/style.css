@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sim-blur-amount: 40px;
+  --sim-dim-brightness: 0.35;
+}
+
+body {
+  background-color: #08080a !important;
+  background-image: radial-gradient(circle at 50% 0%, rgba(229, 9, 20, 0.16) 0%, #08080a 70%) !important;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #ededed;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono-code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Tactile 3D Keycap */
+.keycap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 6px;
+  background: linear-gradient(180deg, #24242d 0%, #15151b 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Mock Player Blur Effect */
+.mock-player.is-blurred .mock-video {
+  filter: blur(var(--sim-blur-amount, 40px)) brightness(var(--sim-dim-brightness, 0.35)) !important;
+  transition: filter 0.14s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.mock-player.is-blurred.hide-subtitles .mock-subtitles {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease !important;
+}
+
+/* Native Blur Button tactile states */
+.native-blur-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 11px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.native-blur-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-0.5px);
+}
+
+.native-blur-btn .eye-off-icon {
+  display: none;
+}
+.native-blur-btn.active .eye-open-icon {
+  display: none;
+}
+.native-blur-btn.active .eye-off-icon {
+  display: inline-block;
+}
+
+.native-blur-btn.active {
+  background: #e50914 !important;
+  border-color: #ff3b47 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(229, 9, 20, 0.55);
+}
+
+/* Preset active state */
+.sim-preset-btn.active-preset {
+  background: rgba(229, 9, 20, 0.12) !important;
+  border-color: #e50914 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.25);
+}
+
+/* Custom Netflix-Red Range Sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  background: #1e1e28;
+  border-radius: 9999px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #e50914;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  background: #e50914;
+  box-shadow: 0 0 14px rgba(229, 9, 20, 0.8);
+}

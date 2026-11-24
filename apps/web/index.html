@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Quick Blur — Instant Native-Feeling Privacy for Netflix</title>
+  <meta name="description" content="Instant native-feeling privacy, blur & dimming controls for Netflix. One-key visual shroud, dialogue subtitle concealment, and spacebar-safe playback controls." />
+  
+  <!-- Official Netflix "N" Ribbon Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M5 2h4v20H5V2z' fill='%23B1060F'/%3E%3Cpath d='M15 2h4v20h-4V2z' fill='%23B1060F'/%3E%3Cpath d='M5 2h4l10 20h-4L5 2z' fill='%23E50914'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body class="bg-[#08080a] text-[#ededed] min-h-screen flex flex-col justify-between selection:bg-netflix-red selection:text-white">
+
+  <!-- SVG Filter Definitions -->
+  <svg width="0" height="0" class="absolute hidden">
+    <defs>
+      <filter id="nf-shadow" x="-20%" y="-10%" width="140%" height="120%">
+        <feDropShadow dx="0" dy="0" stdDeviation="1.2" flood-color="#000" flood-opacity="0.65"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Navigation Bar with Mobile Drawer -->
+  <header class="border-b border-white/[0.08] bg-[#0c0c10]/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-15 flex items-center justify-between">
+      <!-- Brand Lockup with Official Netflix "N" Ribbon Tile -->
+      <a href="./" class="flex items-center space-x-3 group">
+        <div class="relative w-8 h-8 rounded-md bg-[#14141b] border border-white/10 flex items-center justify-center p-1.5 shadow-md group-hover:border-netflix-red/40 transition-colors overflow-hidden">
+          <!-- Official Netflix Folded Ribbon Mark -->
+          <svg viewBox="0 0 24 24" fill="none" class="w-full h-full" aria-hidden="true">
+            <path d="M4 2h4.5v20H4V2z" fill="#B1060F"/>
+            <path d="M15.5 2H20v20h-4.5V2z" fill="#B1060F"/>
+            <polygon points="4,2 8.5,2 20,22 15.5,22" fill="#E50914"/>
+          </svg>
+          <!-- Subtle frosted-glass blur accent slice across bottom half -->
+          <div class="absolute bottom-0 inset-x-0 h-2 bg-white/10 backdrop-blur-[2px] border-t border-white/10"></div>
+        </div>
+
+        <div class="flex items-baseline space-x-2">
+          <span class="font-bold text-sm tracking-tight text-white group-hover:text-zinc-200 transition-colors">
+            Netflix Quick Blur
+          </span>
+          <span class="text-[10px] font-mono-code text-zinc-500 bg-white/[0.04] px-1.5 py-0.2 rounded border border-white/[0.06]">
+            v1.0
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center space-x-6 text-xs text-zinc-300">
+        <a href="#simulator" class="hover:text-white transition-colors">Simulator</a>
+        <a href="#install" class="hover:text-white transition-colors">Install</a>
+        <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+        <a href="./status.html" class="hover:text-white transition-colors flex items-center space-x-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span>Status</span>
+        </a>
+        <a href="./privacy.html" class="hover:text-white transition-colors">Privacy</a>
+        <a href="https://github.com/TryOmar/netflix-quick-blur" target="_blank" rel="noreferrer" class="p-1.5 text-zinc-400 hover:text-white transition-colors" title="GitHub Repository">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        </a>
+      </nav>
+
+      <!-- Mobile Menu Dropdown Toggle -->
+      <details class="md:hidden relative group">
+        <summary class="list-none p-2 text-zinc-300 hover:text-white cursor-pointer rounded border border-white/10 bg-white/[0.04]">
+          <span class="sr-only">Open navigation menu</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </summary>
+        <div class="absolute right-0 mt-2 w-48 bg-[#121218] border border-white/10 rounded-lg shadow-2xl p-2 flex flex-col space-y-1 text-xs z-50">
+          <a href="#simulator" class="px-3 py-2 rounded hover:bg-white/5 text-zinc-200">Simulator</a>
+          <a href="#install" class="px-3 py-2 rounded hover:bg-white/5 text-zinc-200">Install</a>
+          <a href="#architecture" class="px-3 py-2 rounded hover:bg-white/5 text-zinc-200">Architecture</a>
+          <a href="./status.html" class="px-3 py-2 rounded hover:bg-white/5 text-zinc-200">Status</a>
+          <a href="./privacy.html" class="px-3 py-2 rounded hover:bg-white/5 text-zinc-200">Privacy Policy</a>
+          <a href="https://github.com/TryOmar/netflix-quick-blur" target="_blank" rel="noreferrer" class="px-3 py-2 rounded hover:bg-white/5 text-zinc-200">GitHub Source</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-4xl mx-auto px-4 pt-10 pb-8 text-center">
+    <div class="inline-flex items-center space-x-2 px-3 py-1 bg-white/[0.03] border border-white/[0.08] rounded-full text-[11px] font-mono-code text-zinc-300 mb-5">
+      <span class="w-1.5 h-1.5 rounded-full bg-netflix-red animate-pulse"></span>
+      <span>ZERO-LATENCY PLAYBACK VEIL</span>
+      <span class="text-zinc-600">//</span>
+      <span class="text-zinc-400">100% PRIVATE</span>
+    </div>
+
+    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white max-w-2xl mx-auto leading-tight">
+      Instant Privacy for <span class="text-netflix-red underline decoration-netflix-red/30 underline-offset-4">Netflix</span>.
+    </h1>
+
+    <p class="mt-3.5 text-sm sm:text-base text-zinc-400 max-w-xl mx-auto font-normal leading-relaxed">
+      A single-key visual shroud for sudden walk-ins, sensitive scenes, and subtitle spoilers. Triggered with <kbd class="keycap">B</kbd> directly inside Netflix's playback controls.
+    </p>
+
+    <!-- CTAs with Lucide & Brand Marks -->
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs">
+      <!-- Chrome Extension CTA -->
+      <a href="#install-extension" class="px-5 py-3 bg-netflix-red hover:bg-[#b80710] text-white font-semibold rounded-lg shadow-lg shadow-red-950/40 flex items-center space-x-2 transition-all transform hover:-translate-y-0.5">
+        <!-- Chrome Brand Mark -->
+        <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29L1.931 5.47zm13.125 4.316a5.45 5.45 0 0 1 2.158 5.76L11.26 22.4A11.986 11.986 0 0 0 12 24c6.627 0 12-5.373 12-12 0-.742-.068-1.468-.196-2.174H15.056z"/></svg>
+        <span>Add to Chrome (Free)</span>
+      </a>
+
+      <!-- Userscript CTA -->
+      <a href="./downloads/netflix-quick-blur.user.js" class="px-5 py-3 bg-[#14141b] hover:bg-[#1a1a24] text-zinc-200 border border-white/10 font-semibold rounded-lg flex items-center space-x-2 transition-all transform hover:-translate-y-0.5">
+        <!-- Lucide Code / Userscript Icon -->
+        <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <span>1-Click Tampermonkey Install</span>
+      </a>
+
+      <!-- Discord CTA -->
+      <a href="https://discord.gg/placeholder" target="_blank" rel="noreferrer" class="px-4 py-3 bg-white/[0.04] hover:bg-white/[0.08] text-zinc-300 border border-white/10 rounded-lg flex items-center space-x-2 transition-all">
+        <!-- Discord Brand Mark -->
+        <svg class="w-4 h-4 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        <span>Discord</span>
+      </a>
+    </div>
+
+    <!-- Quick Spec Strip with Lucide Icons -->
+    <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-3xl mx-auto text-left font-mono-code text-[11px]">
+      <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md flex items-center space-x-2.5">
+        <!-- Lucide Keyboard -->
+        <svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"></path></svg>
+        <div>
+          <span class="text-zinc-500 block text-[10px]">SHORTCUT</span>
+          <span class="text-white font-bold block">KEY <kbd class="keycap">B</kbd></span>
+        </div>
+      </div>
+
+      <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md flex items-center space-x-2.5">
+        <!-- Lucide Cpu -->
+        <svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2"></rect><rect width="6" height="6" x="9" y="9" rx="1"></rect><path d="M15 2v2M9 2v2M20 15h2M20 9h2M9 20v2M15 20v2M2 9h2M2 15h2"></path></svg>
+        <div>
+          <span class="text-zinc-500 block text-[10px]">OVERHEAD</span>
+          <span class="text-white font-bold block">0.00 MS [GPU]</span>
+        </div>
+      </div>
+
+      <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md flex items-center space-x-2.5">
+        <!-- Lucide Crosshair / Space -->
+        <svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+        <div>
+          <span class="text-zinc-500 block text-[10px]">FOCUS</span>
+          <span class="text-white font-bold block">SPACEBAR SAFE</span>
+        </div>
+      </div>
+
+      <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-md flex items-center space-x-2.5">
+        <!-- Lucide ShieldCheck -->
+        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        <div>
+          <span class="text-zinc-500 block text-[10px]">TELEMETRY</span>
+          <span class="text-emerald-400 font-bold block">0 BYTES [LOCAL]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Live Simulator -->
+  <section id="simulator" class="max-w-4xl mx-auto px-4 py-6">
+    <div class="bg-[#0f0f15] border border-white/[0.1] rounded-xl p-4 sm:p-6 shadow-2xl">
+      <div class="flex flex-wrap items-center justify-between pb-4 border-b border-white/[0.08] gap-3">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-sm tracking-tight text-white uppercase">
+              Interactive Playback Simulator
+            </span>
+            <span class="text-zinc-600 font-mono-code text-xs">//</span>
+            <span class="text-xs text-zinc-400 font-normal">Authentic Netflix Watch HUD</span>
+          </div>
+          <p class="text-xs text-zinc-400 mt-0.5">
+            Click the Eye button below or press <kbd class="keycap">B</kbd> on your keyboard.
+          </p>
+        </div>
+
+        <div id="sim-status-badge" class="px-3 py-1 rounded-full font-mono-code text-[11px] font-bold tracking-wider bg-zinc-800 text-zinc-300 border border-white/10 flex items-center space-x-1.5">
+          VIEWPORT CLEAR
+        </div>
+      </div>
+
+      <!-- Mock Netflix Player Frame -->
+      <div id="sim-player" class="mock-player relative h-72 sm:h-96 w-full rounded-lg overflow-hidden bg-black mt-4 flex flex-col justify-between border border-white/10 select-none shadow-2xl">
+        <!-- Layered Cinematic Mock Scene (Sci-Fi Neon Doorway with High Contrast) -->
+        <div class="mock-video absolute inset-0 bg-cover bg-center transition-all duration-150" style="background: radial-gradient(circle at 50% 35%, #2a1145 0%, #080314 55%, #000000 95%);">
+          <!-- Ambient glowing doorway & perspective corridor geometry -->
+          <div class="absolute inset-0 flex items-center justify-center opacity-85">
+            <svg viewBox="0 0 800 450" class="w-full h-full" preserveAspectRatio="xMidYMid slice" fill="none">
+              <!-- Distant corridor perspective lines -->
+              <line x1="0" y1="0" x2="330" y2="180" stroke="#E50914" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="800" y1="0" x2="470" y2="180" stroke="#FFAA00" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="0" y1="450" x2="330" y2="280" stroke="#E50914" stroke-opacity="0.4" stroke-width="1.5"/>
+              <line x1="800" y1="450" x2="470" y2="280" stroke="#FFAA00" stroke-opacity="0.4" stroke-width="1.5"/>
+              
+              <!-- Glowing neon door frame silhouette -->
+              <rect x="340" y="150" width="120" height="150" rx="6" fill="#120524" stroke="#E50914" stroke-width="3" filter="drop-shadow(0 0 12px #E50914)"/>
+              <rect x="360" y="170" width="80" height="130" rx="3" fill="#FFE57F" fill-opacity="0.85" filter="drop-shadow(0 0 20px #FF9100)"/>
+              
+              <!-- Mysterious hooded character silhouette -->
+              <path d="M390 280 C390 240 400 220 400 200 C395 195 405 195 400 200 C400 220 410 240 410 280 Z" fill="#0c0418"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Top Telemetry Header with Authentic Netflix "N" Ribbon & Series Tag -->
+        <div class="relative z-10 px-4 py-3 bg-gradient-to-b from-black/90 via-black/40 to-transparent flex items-center justify-between text-xs font-mono-code">
+          <div class="flex items-center space-x-2">
+            <!-- Official Netflix "N" Ribbon SVG -->
+            <svg viewBox="0 0 24 24" fill="none" class="w-4 h-4 shrink-0" aria-hidden="true">
+              <path d="M4 2h4.5v20H4V2z" fill="#B1060F"/>
+              <path d="M15.5 2H20v20h-4.5V2z" fill="#B1060F"/>
+              <polygon points="4,2 8.5,2 20,22 15.5,22" fill="#E50914"/>
+            </svg>
+            <span class="text-netflix-red font-bold text-[10px] tracking-wider uppercase">SERIES</span>
+            <span class="text-white font-bold tracking-wide">STRANGER MATTERS — S4:E7 "THE VEIL"</span>
+          </div>
+          <span class="text-zinc-400 text-[11px]">42:18 / 58:40</span>
+        </div>
+
+        <!-- Subtitles Overlay -->
+        <div class="mock-subtitles relative z-10 text-center px-4 py-2 my-auto transition-all duration-150">
+          <span class="inline-block bg-black/85 backdrop-blur-sm px-4 py-1.5 rounded text-sm text-yellow-300 font-sans font-medium tracking-wide border border-white/10 shadow-2xl">
+            [DIALOGUE] "Whatever you do, do not look back into the hallway."
+          </span>
+        </div>
+
+        <!-- Bottom Player Section with Scrubber & Authentic Netflix Vector Controls -->
+        <div class="relative z-10 bg-gradient-to-t from-black via-black/80 to-transparent pt-3 pb-2.5 px-4">
+          <!-- Authentic Netflix Scrubber Bar -->
+          <div class="w-full h-1 bg-white/20 rounded-full mb-3 cursor-pointer group relative flex items-center">
+            <div class="h-full bg-netflix-red rounded-full relative" style="width: 72%;">
+              <!-- Scrubber Dot -->
+              <span class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 rounded-full bg-netflix-red shadow-[0_0_10px_#e50914] transform scale-100 group-hover:scale-125 transition-transform"></span>
+            </div>
+          </div>
+
+          <!-- Controls Bar -->
+          <div class="flex items-center justify-between text-white">
+            <!-- Left Controls: Play, Skip 10, Volume -->
+            <div class="flex items-center space-x-4">
+              <!-- Play Button -->
+              <button type="button" aria-label="Play" class="hover:text-netflix-red hover:scale-110 transition-all">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+              </button>
+
+              <!-- Skip Back 10s -->
+              <button type="button" aria-label="Skip Back 10 seconds" class="hover:text-zinc-300 hover:scale-110 transition-all text-zinc-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l3 2"></path></svg>
+              </button>
+
+              <!-- Skip Forward 10s -->
+              <button type="button" aria-label="Skip Forward 10 seconds" class="hover:text-zinc-300 hover:scale-110 transition-all text-zinc-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M12 7v5l3 2"></path></svg>
+              </button>
+
+              <!-- Volume Icon -->
+              <button type="button" aria-label="Volume" class="hover:text-zinc-300 hover:scale-110 transition-all text-zinc-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+              </button>
+
+              <span class="text-xs font-mono-code text-zinc-400">42:18</span>
+            </div>
+
+            <!-- Right Controls: Quick Blur Injection + Fullscreen -->
+            <div class="flex items-center space-x-3.5">
+              <!-- Injected Quick Blur Button -->
+              <button id="sim-native-btn" class="native-blur-btn" title="Blur Video (B)" aria-label="Blur Video (B)">
+                <!-- Eye Open Lucide -->
+                <svg class="w-3.5 h-3.5 eye-open-icon mr-1.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <!-- Eye Off Lucide -->
+                <svg class="w-3.5 h-3.5 eye-off-icon mr-1.5 text-white" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                <span id="sim-btn-label">BLUR [B]</span>
+              </button>
+
+              <!-- Fullscreen Lucide -->
+              <button type="button" aria-label="Fullscreen" class="hover:text-zinc-200 hover:scale-110 transition-all text-zinc-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Presets Selector Row with Lucide Icons -->
+      <div class="mt-5 pt-4 border-t border-white/[0.08]">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs font-mono-code text-zinc-400 uppercase tracking-wider">
+            TACTILE PRESETS
+          </span>
+          <span class="text-[11px] font-mono-code text-zinc-500">
+            CLICK TO PREVIEW PROFILE
+          </span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+          <!-- Light Haze with CloudFog icon -->
+          <button data-preset="light" class="sim-preset-btn p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] text-zinc-300 border border-white/[0.08] text-left transition-all flex items-start space-x-2.5">
+            <svg class="w-4 h-4 text-zinc-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M16 17H7"></path><path d="M17 21H9"></path></svg>
+            <div>
+              <span class="font-bold text-white block">Light Haze</span>
+              <span class="text-[11px] font-mono-code text-zinc-400 block mt-0.5">16PX • 70% DIM</span>
+            </div>
+          </button>
+
+          <!-- Standard Veil with EyeOff icon -->
+          <button data-preset="standard" class="sim-preset-btn active-preset p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] text-zinc-300 border border-white/[0.08] text-left transition-all flex items-start space-x-2.5">
+            <svg class="w-4 h-4 text-netflix-red mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            <div>
+              <span class="font-bold text-white block">Standard Veil</span>
+              <span class="text-[11px] font-mono-code text-zinc-400 block mt-0.5">40PX • 35% DIM • SUBTITLES OFF</span>
+            </div>
+          </button>
+
+          <!-- Total Blackout with Moon icon -->
+          <button data-preset="blackout" class="sim-preset-btn p-3 rounded-lg bg-white/[0.02] hover:bg-white/[0.06] text-zinc-300 border border-white/[0.08] text-left transition-all flex items-start space-x-2.5">
+            <svg class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+            <div>
+              <span class="font-bold text-white block">Total Blackout</span>
+              <span class="text-[11px] font-mono-code text-zinc-400 block mt-0.5">64PX • 5% DIM • FULL AUDIO/VIDEO VEIL</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Sliders with Styled Crimson Range Thumbs -->
+      <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-white/[0.08] text-xs font-mono-code">
+        <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-lg">
+          <div class="flex justify-between items-center text-zinc-300 mb-2">
+            <span>BLUR INTENSITY</span>
+            <span id="sim-blur-val" class="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded text-[10px]">40PX</span>
+          </div>
+          <input id="sim-blur-slider" type="range" min="0" max="80" value="40" class="w-full" />
+        </div>
+
+        <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-lg">
+          <div class="flex justify-between items-center text-zinc-300 mb-2">
+            <span>BRIGHTNESS DIMMER</span>
+            <span id="sim-dim-val" class="text-white font-bold bg-white/10 px-1.5 py-0.5 rounded text-[10px]">35%</span>
+          </div>
+          <input id="sim-dim-slider" type="range" min="0" max="100" value="35" class="w-full" />
+        </div>
+
+        <div class="p-3 bg-white/[0.02] border border-white/[0.06] rounded-lg flex items-center justify-between">
+          <div>
+            <span class="text-zinc-200 block font-bold">HIDE SUBTITLES</span>
+            <span class="text-zinc-500 text-[10px] block">PREVENT SPOILERS</span>
+          </div>
+          <input id="sim-subtitles-toggle" type="checkbox" checked class="accent-netflix-red w-4 h-4 cursor-pointer" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dual-Track Distribution Section -->
+  <section id="install" class="max-w-5xl mx-auto px-4 py-16">
+    <div class="border-b border-white/[0.08] pb-4 mb-8 flex items-center justify-between">
+      <div>
+        <span class="text-xs font-mono-code text-netflix-red uppercase tracking-wider font-semibold">DISTRIBUTION ARTIFACTS</span>
+        <h2 class="text-2xl font-bold text-white mt-1">Dual-Track Deployment Channels</h2>
+      </div>
+      <span class="text-xs font-mono-code text-zinc-500 hidden sm:inline">SINGLE SOURCE OF TRUTH</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Chrome Extension Card -->
+      <div id="install-extension" class="bg-[#0f0f15] border border-white/[0.08] hover:border-netflix-red/40 rounded-xl p-6 flex flex-col justify-between transition-all">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
+            <span class="text-xs font-mono-code font-bold text-netflix-red flex items-center space-x-1.5">
+              <span>TRACK 01</span>
+              <span class="text-zinc-600">//</span>
+              <span>EXTENSION</span>
+            </span>
+            <span class="text-[10px] font-mono-code text-zinc-400 bg-white/[0.06] px-2 py-0.5 rounded">RECOMMENDED</span>
+          </div>
+
+          <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+            <!-- Chrome Brand Mark -->
+            <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29L1.931 5.47zm13.125 4.316a5.45 5.45 0 0 1 2.158 5.76L11.26 22.4A11.986 11.986 0 0 0 12 24c6.627 0 12-5.373 12-12 0-.742-.068-1.468-.196-2.174H15.056z"/></svg>
+            <span>Chrome Extension (Manifest V3)</span>
+          </h3>
+
+          <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+            Built with WXT, React 18, and Tailwind CSS. Features full settings popup, live visual controls, keybind recorder, and cross-tab storage sync.
+          </p>
+
+          <div class="mt-4 space-y-2 text-xs font-mono-code text-zinc-300">
+            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+              <span class="text-zinc-500">SPECIFICATION</span>
+              <span>MANIFEST V3</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+              <span class="text-zinc-500">PERMISSIONS</span>
+              <span>STORAGE ONLY [LEAST PRIVILEGE]</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="text-zinc-500">TELEMETRY</span>
+              <span class="text-emerald-400">0% [LOCAL ONLY]</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-white/[0.08] space-y-2.5">
+          <a href="https://chrome.google.com/webstore" target="_blank" rel="noreferrer" class="w-full py-3 bg-netflix-red hover:bg-[#b80710] text-white text-center font-bold text-xs rounded-lg block transition-colors shadow-lg shadow-red-950/40">
+            INSTALL FROM CHROME WEB STORE →
+          </a>
+
+          <details class="text-[11px] font-mono-code text-zinc-400 group cursor-pointer pt-1">
+            <summary class="hover:text-zinc-200 transition-colors">OR LOAD UNPACKED ZIP (DEVELOPER MODE)</summary>
+            <div class="mt-2 p-2.5 bg-black/60 rounded border border-white/[0.06] space-y-1 text-zinc-300 font-sans">
+              <p>1. Download <code class="text-white bg-white/10 px-1 py-0.5 rounded font-mono-code">netflix-quick-blur-chrome-v1.0.0.zip</code> from GitHub Releases.</p>
+              <p>2. Unpack into a local folder on your computer.</p>
+              <p>3. Go to <code class="text-white bg-white/10 px-1 py-0.5 rounded font-mono-code">chrome://extensions</code> → enable Developer mode → click Load unpacked.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Userscript Card -->
+      <div class="bg-[#0f0f15] border border-white/[0.08] hover:border-white/20 rounded-xl p-6 flex flex-col justify-between transition-all">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
+            <span class="text-xs font-mono-code font-bold text-amber-400 flex items-center space-x-1.5">
+              <span>TRACK 02</span>
+              <span class="text-zinc-600">//</span>
+              <span>USERSCRIPT</span>
+            </span>
+            <span class="text-[10px] font-mono-code text-zinc-400 bg-white/[0.06] px-2 py-0.5 rounded">POWER USERS</span>
+          </div>
+
+          <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+            <!-- Lucide Code icon -->
+            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>Zero-Dependency Userscript</span>
+          </h3>
+
+          <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+            Compiled with esbuild directly from the shared core engine into a clean, standalone <code class="text-white bg-white/10 px-1 py-0.5 rounded font-mono-code">.user.js</code> file. Installs with 1 click into Tampermonkey or Violentmonkey.
+          </p>
+
+          <div class="mt-4 space-y-2 text-xs font-mono-code text-zinc-300">
+            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+              <span class="text-zinc-500">FORMAT</span>
+              <span>STANDALONE IIFE</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-white/[0.04]">
+              <span class="text-zinc-500">STORAGE</span>
+              <span>GM_GETVALUE / GM_SETVALUE</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="text-zinc-500">UPDATES</span>
+              <span>AUTOMATIC VIA GITHUB PAGES</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-white/[0.08] space-y-2.5">
+          <a href="./downloads/netflix-quick-blur.user.js" class="w-full py-3 bg-[#14141b] hover:bg-[#1a1a24] text-amber-400 border border-amber-500/30 text-center font-bold text-xs rounded-lg block transition-colors">
+            1-CLICK TAMPERMONKEY INSTALL [.USER.JS] →
+          </a>
+
+          <a href="https://greasyfork.org/" target="_blank" rel="noreferrer" class="w-full py-2.5 bg-transparent hover:bg-white/[0.04] text-zinc-400 hover:text-white border border-white/[0.08] text-center text-xs rounded-lg block transition-colors">
+            VIEW ON GREASYFORK →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Tenets with Lucide Icons -->
+  <section id="architecture" class="max-w-5xl mx-auto px-4 py-16 border-t border-white/[0.08]">
+    <div class="border-b border-white/[0.08] pb-4 mb-8">
+      <span class="text-xs font-mono-code text-netflix-red uppercase tracking-wider font-semibold">SYSTEM ARCHITECTURE</span>
+      <h2 class="text-2xl font-bold text-white mt-1">Core Engineering Standards</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-[#0f0f15] border border-white/[0.08] rounded-xl p-5">
+        <div class="w-8 h-8 rounded-lg bg-netflix-red/10 text-netflix-red flex items-center justify-center mb-3">
+          <!-- Lucide Focus / Crosshair -->
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+        </div>
+        <span class="text-[11px] font-mono-code font-bold text-netflix-red block mb-1">TENET 01 // FOCUS</span>
+        <h3 class="font-bold text-white text-sm">Spacebar-Safe Injection</h3>
+        <p class="text-xs text-zinc-400 mt-2 leading-relaxed font-normal">
+          Traverses single-child DOM wrappers to dock natively beside Fullscreen. Calls <code class="text-white bg-white/10 px-1 py-0.5 rounded font-mono-code">btn.blur()</code> after activation so Spacebar always controls play/pause.
+        </p>
+      </div>
+
+      <div class="bg-[#0f0f15] border border-white/[0.08] rounded-xl p-5">
+        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+          <!-- Lucide CaptionsOff -->
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10.5 5H19a2 2 0 0 1 2 2v8.5M17 17H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2M2 2l20 20M7 15h4M15 15h2M7 11h2"></path></svg>
+        </div>
+        <span class="text-[11px] font-mono-code font-bold text-netflix-red block mb-1">TENET 02 // SUBTITLES</span>
+        <h3 class="font-bold text-white text-sm">Zero-Delay Dialogue Shield</h3>
+        <p class="text-xs text-zinc-400 mt-2 leading-relaxed font-normal">
+          Toggles <code class="text-white bg-white/10 px-1 py-0.5 rounded font-mono-code">.player-timedtext</code> opacity simultaneously with video blurring to protect against dialogue plot spoilers.
+        </p>
+      </div>
+
+      <div class="bg-[#0f0f15] border border-white/[0.08] rounded-xl p-5">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
+          <!-- Lucide Lock -->
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <span class="text-[11px] font-mono-code font-bold text-netflix-red block mb-1">TENET 03 // ENCLAVE</span>
+        <h3 class="font-bold text-white text-sm">100% Local Execution</h3>
+        <p class="text-xs text-zinc-400 mt-2 leading-relaxed font-normal">
+          Zero analytics, zero remote telemetry, zero external network calls. All state is held locally in Chrome's sandboxed storage.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer with Sister Project Link & Disclaimer -->
+  <footer class="border-t border-white/[0.08] bg-[#0c0c10] py-12 text-xs text-zinc-400 font-mono-code">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="text-center sm:text-left">
+        <div class="flex items-center justify-center sm:justify-start space-x-2">
+          <!-- Official Netflix "N" Ribbon Mini -->
+          <svg viewBox="0 0 24 24" fill="none" class="w-3.5 h-3.5" aria-hidden="true">
+            <path d="M4 2h4.5v20H4V2z" fill="#B1060F"/>
+            <path d="M15.5 2H20v20h-4.5V2z" fill="#B1060F"/>
+            <polygon points="4,2 8.5,2 20,22 15.5,22" fill="#E50914"/>
+          </svg>
+          <span class="font-bold text-white">Netflix Quick Blur</span>
+          <span class="text-zinc-600">//</span>
+          <span>Open Source Ecosystem</span>
+        </div>
+        <p class="mt-1 text-zinc-500 text-[11px] max-w-lg font-sans">
+          Netflix Quick Blur is an independent open-source project and is not affiliated with, endorsed by, or sponsored by Netflix, Inc.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-5 text-[11px]">
+        <a href="./privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="./status.html" class="hover:text-white transition-colors">Selector Health</a>
+        <a href="https://github.com/TryOmar/netflix-quick-blur" target="_blank" rel="noreferrer" class="hover:text-white transition-colors">GitHub</a>
+        <a href="https://discord.gg/placeholder" target="_blank" rel="noreferrer" class="hover:text-white transition-colors">Discord</a>
+        <a href="https://github.com/TryOmar/pray-then-play" target="_blank" rel="noreferrer" class="text-emerald-400 hover:underline">
+          Sister Project: Pray Then Play →
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./src/simulator.ts"></script>
+</body>
+</html>
