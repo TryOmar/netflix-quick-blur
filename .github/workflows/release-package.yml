@@ -1,0 +1,60 @@
+name: Package & Publish Release Assets
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.24.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Core Engine & Packages
+        run: |
+          pnpm --filter @netflix-blur/core build
+          pnpm --filter @netflix-blur/ui build
+
+      - name: Build Chrome Extension (MV3)
+        run: pnpm --filter extension build
+
+      - name: Package Extension ZIP
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          [ -z "$VERSION" ] && VERSION="1.0.0"
+          cd apps/extension/.output/chrome-mv3
+          zip -r "../../../netflix-quick-blur-chrome-v${VERSION}.zip" ./*
+          cd ../../../
+
+      - name: Build Userscript (.user.js)
+        run: |
+          pnpm --filter userscript build
+          cp apps/userscript/dist/netflix-quick-blur.user.js ./netflix-quick-blur.user.js
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            netflix-quick-blur-chrome-*.zip
+            netflix-quick-blur.user.js
+          generate_release_notes: true
