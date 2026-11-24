@@ -1,0 +1,16 @@
+{
+  "name": "@netflix-blur/ui",
+  "version": "1.0.0",
+  "description": "Shared UI tokens and icons for Netflix Quick Blur",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3"
+  }
+}
