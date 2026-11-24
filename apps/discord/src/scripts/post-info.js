@@ -19,7 +19,7 @@ export async function postInfo(guild) {
       }
     }
 
-    const payload = createInfoEmbeds();
+    const payload = createInfoEmbeds(guild);
     await channel.send(payload);
     console.log('  ✓ Published 4 modular #info cards with Action Buttons.');
   } catch (err) {

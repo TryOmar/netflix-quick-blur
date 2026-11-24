@@ -1,7 +1,17 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { config } from '../config.js';
 
-export function createInfoEmbeds() {
+export function createInfoEmbeds(guild) {
+  let brokenSelectorsMention = '**#🚨・broken-selectors**';
+  if (guild && guild.channels && guild.channels.cache) {
+    const brokenCh = guild.channels.cache.find(
+      (c) => c.name && c.name.includes('broken-selectors')
+    );
+    if (brokenCh) {
+      brokenSelectorsMention = `<#${brokenCh.id}>`;
+    }
+  }
+
   // Card 1: Hero & Mission
   const headerEmbed = new EmbedBuilder()
     .setColor(config.colors.netflixRed)
@@ -52,7 +62,7 @@ export function createInfoEmbeds() {
     .setDescription(
       'Netflix frequently rolls out client updates and A/B layout experiments.\n\n' +
       '**🚨 Broken Button or Disappeared Controls?**\n' +
-      'Post in **#broken-selectors** with your Netflix URL layout and a screenshot.\n' +
+      `Post in ${brokenSelectorsMention} with your Netflix URL layout and a screenshot.\n` +
       'Because all selectors live in `packages/core/src/selectors.ts`, fixes are pushed in under 60 seconds.\n\n' +
       '**🎮 Sister Ecosystem**\n' +
       '[Pray Then Play — Salah First. Gaming Second.](' + config.brand.links.sisterProject + ')'
