@@ -1,0 +1,23 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Production & Build Outputs
+dist
+.output
+.wxt
+.turbo
+_site
+
+# Environment & Local Overrides
+.env
+.env.local
+*.local
+*.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
