@@ -1,0 +1,18 @@
+{
+  "name": "discord-provisioner",
+  "version": "1.0.0",
+  "description": "Automated Discord Server Architect & Provisioner for Netflix Quick Blur",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "node src/scripts/deploy-all.js",
+    "sync:roles": "node src/scripts/sync-roles.js",
+    "sync:channels": "node src/scripts/sync-channels.js",
+    "post:info": "node src/scripts/post-info.js",
+    "post:rules": "node src/scripts/post-rules.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5"
+  }
+}

@@ -10,6 +10,7 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
+    "deploy:discord": "pnpm --filter discord-provisioner deploy",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
